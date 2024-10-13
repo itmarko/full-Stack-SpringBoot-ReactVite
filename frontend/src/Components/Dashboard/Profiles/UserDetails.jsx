@@ -1,7 +1,7 @@
 import quotes from "./Quotes";
 import baby from "../../../assets/baby-girl.jpg";
 import cover from "../../../assets/hero-user.jpg";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 const ProfileDetails = () => {
@@ -27,7 +27,7 @@ const ProfileDetails = () => {
 
   const loadStudent = async () => {
     const result = await axios.get(
-      `http://localhost:8080/students/student/${id}`
+      `http://localhost:8080/api/auth/student/${id}`
     );
     setStudent(result.data);
   };
@@ -255,6 +255,14 @@ const ProfileDetails = () => {
             </a>
           </div>
         </div>
+        <Link to={`/dashboard/edit-details/${student.id}`}>
+          <button
+            type="button"
+            className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+          >
+            Go To Edit
+          </button>
+        </Link>
       </div>
     </section>
   );

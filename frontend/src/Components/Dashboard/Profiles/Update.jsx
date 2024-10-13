@@ -3,17 +3,20 @@ import baby from "../../../assets/baby-girl.jpg";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Popup from "../../Elements/popups/PopupSave";
 
 const Update = () => {
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [studentId, setStudentId] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [student, setStudent] = useState({
     firstName: "",
     lastName: "",
     fatherName: "",
-    eMail: "",
+    email: "",
     addharNumber: "",
     moNumber: "",
     parentMoNumber: "",
@@ -35,7 +38,7 @@ const Update = () => {
   const loadStudent = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:8080/students/student/${id}`
+        `http://localhost:8080/api/auth/student/${id}`
       );
       setStudent(result.data);
       setFormData(result.data); // Initialize form data with fetched student data
@@ -54,15 +57,30 @@ const Update = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:8080/students/update/${id}`, formData);
+      await axios.put(`http://localhost:8080/api/auth/update/${id}`, formData);
       setStudent(formData);
       setIsEditing(false); // Exit edit mode on successful save
       navigate(`/dashboard/user-details/${id}`); // Redirect or notify success
     } catch (error) {
       console.error("Error updating student data:", error);
+    } finally {
+      setIsPopupOpen(false);
     }
   };
 
+  const handleOpenPopup = (id) => {
+    setStudentId(id);
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
+  const handleConfirmSave = () => {
+    if (studentId) {
+      handleSave(studentId);
+    }
+  };
   return (
     <section className="w-full overflow-hidden dark:bg-gray-900">
       <div className="flex flex-col">
@@ -208,7 +226,7 @@ const Update = () => {
                     </div>
                     <div className="flex flex-col py-3">
                       <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
-                      Registration Date and Time
+                        Registration Date and Time
                       </dt>
                       <dd>
                         <input
@@ -260,9 +278,9 @@ const Update = () => {
                       </dt>
                       <dd>
                         <input
-                          type="eMail"
-                          name="eMail"
-                          value={formData.eMail}
+                          type="email"
+                          name="email"
+                          value={formData.email}
                           onChange={handleInputChange}
                           className="w-full border border-gray-300 p-2 rounded-md"
                         />
@@ -288,11 +306,16 @@ const Update = () => {
                 </div>
               </div>
               <button
-                onClick={handleSave}
+                onClick={handleOpenPopup}
                 className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
               >
                 Save Changes
               </button>
+              <Popup
+                isOpen={isPopupOpen}
+                onClose={handleClosePopup}
+                onConfirm={handleConfirmSave}
+              />
               <button
                 onClick={() => setIsEditing(false)}
                 className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
@@ -402,7 +425,7 @@ const Update = () => {
                       <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
                         Email
                       </dt>
-                      <dd className="text-lg font-semibold">{student.eMail}</dd>
+                      <dd className="text-lg font-semibold">{student.email}</dd>
                     </div>
 
                     <div className="flex flex-col pt-3">

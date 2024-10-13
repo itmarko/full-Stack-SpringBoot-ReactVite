@@ -48,7 +48,7 @@ const StudentView = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/students/delete/${id}`);
+      await axios.delete(`http://localhost:8080/api/auth/delete/${id}`);
       loadStudents();
     } catch (error) {
       console.error("Error deleting student:", error);
@@ -71,6 +71,7 @@ const StudentView = () => {
       handleDelete(studentId);
     }
   };
+
   const handleFilterChange = (event) => {
     setFilterByDays(event.target.value);
   };
@@ -94,7 +95,7 @@ const StudentView = () => {
             <option selected value="">
               All
             </option>
-            <option value="1-day">Last 1 Day</option>
+            <option value="1-day">Today</option>
             <option value="3-days">Last 3 Days</option>
             <option value="5-days">Last 5 Days</option>
             <option value="7-days">Last 7 Days</option>

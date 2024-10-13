@@ -1,9 +1,11 @@
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+
 function Popup({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null; // Render nothing if the popup is not open
 
   return (
     <>
-    
       <div
         id="modelConfirm"
         className="fixed z-50 inset-0  bg-opacity-60 overflow-y-auto h-full w-full px-4 "
@@ -48,26 +50,28 @@ function Popup({ isOpen, onClose, onConfirm }) {
             <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
               Are you sure you want to delete this user?
             </h3>
-            <a
-              href="#"
-              onClick={onClose}
+            <Link
+              onClick={onConfirm}
               className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2"
             >
               Yes, I&apos;m sure
-            </a>
-            <a
-              href="#"
-              onClick={onConfirm}
+            </Link>
+            <Link
+              onClick={onClose}
               className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center"
               data-modal-toggle="delete-user-modal"
             >
               No, cancel
-            </a>
+            </Link>
           </div>
         </div>
       </div>
     </>
   );
 }
-
+Popup.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+};
 export default Popup;

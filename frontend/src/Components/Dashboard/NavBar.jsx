@@ -17,7 +17,7 @@ const Navbar = ({onLogout, search, setSearch}) => {
   return (
     <>
     
-      <Disclosure as="nav" className="bg-gray-800 h-16 px-4 flex items-center justify-between">
+      <Disclosure as="nav" className="bg-gray-800 h-14 px-4 flex items-center justify-between">
         <div className="relative">
           <Search search={search} setSearch={setSearch} />
         </div>

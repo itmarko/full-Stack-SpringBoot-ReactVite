@@ -1,3 +1,4 @@
+import axios from "axios"; // Add this import for axios
 import { createContext, useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 
@@ -5,21 +6,33 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem("isAuthenticated") === "true";
+    return sessionStorage.getItem("isAuthenticated") === "true";
   });
 
   const login = () => {
     setIsAuthenticated(true);
-    localStorage.setItem("isAuthenticated", "true");
+    sessionStorage.setItem("isAuthenticated", "true");
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("isAuthenticated");
+  const logout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:8080/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+      setIsAuthenticated(false);
+      sessionStorage.removeItem("isAuthenticated");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   useEffect(() => {
-    localStorage.setItem("isAuthenticated", isAuthenticated ? "true" : "false");
+    sessionStorage.setItem(
+      "isAuthenticated",
+      isAuthenticated ? "true" : "false"
+    );
   }, [isAuthenticated]);
 
   return (

@@ -1,6 +1,7 @@
 package com.Spring.Server.Model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.hibernate.annotations.NaturalId;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,8 +32,8 @@ public class Student {
 	private String parmanentAddress;
 	private String gender;
 	private String DoBirth;
-	@DateTimeFormat(pattern = "MM/dd/yyyy hh:mm a")
-	private LocalDateTime datetime;
+	private LocalDateTime date;
+	private LocalTime time;
 
 	@ManyToOne // Many students can belong to one user
 	@JoinColumn(name = "admin_id", nullable = false)
